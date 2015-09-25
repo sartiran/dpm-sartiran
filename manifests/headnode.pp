@@ -19,6 +19,8 @@ class dpm::headnode (
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
     $db_pass =  $dpm::params::db_pass,
+    #$db_hash =  "*3573F3D4D433A1EAB3058322CA680B0FE2F3E9D8",
+    $db_hash =  $dpm::params::db_hash,
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
@@ -36,6 +38,9 @@ class dpm::headnode (
 
     #GridFtp redirection
     $gridftp_redirect = $dpm::params::gridftp_redirect,
+
+    #Enable Space reporting
+    $enable_space_reporting =  $dpm::params::enable_space_reporting,
   
   )inherits dpm::params {
 
@@ -58,7 +63,7 @@ class dpm::headnode (
       $site_name = undef
     }
 
-
+    $disk_nodes_str=join($disk_nodes,' ');
     
     #some packages that should be present if we want things to run
     ensure_resource('package',['openssh-server','openssh-clients','vim-minimal','cronie','policycoreutils','selinux-policy'],{ensure => present,before => Class[Lcgdm::Base::Config]})
@@ -92,25 +97,59 @@ class dpm::headnode (
 
     $override_options = {
       'mysqld' => {
-        'max_connections'    => '1000',
-        'query_cache_size'   => '256M',
-        'query_cache_limit'  => '1MB',
-        'innodb_flush_method' => 'O_DIRECT',
-        'innodb_buffer_pool_size' => '1000000000',
-        'bind-address' => '0.0.0.0',
-      }
+            'max_connections'    => '1000',
+            'query_cache_size'   => '256M',
+            'query_cache_limit'  => '1MB',
+            'innodb_flush_method' => 'O_DIRECT',
+            'innodb_buffer_pool_size' => '1000000000',
+            'bind-address' => '0.0.0.0',
+          }
     }
 
     
     class{"mysql::server":
       service_enabled => true,
       root_password   => "${mysql_root_pass}",
-      override_options => $override_options
+      override_options => $override_options  
     }
-                                      
+
+
+    #configure grants
+    ensure_resource('mysql_user', $disk_nodes.map |$node| {"${db_user}@$node"},{
+      ensure        => present,
+      password_hash => $db_hash,
+      provider      => 'mysql',
+      tag => 'nodeuser',
+    })
+
+
+    
+  
+    create_resources(
+      'mysql_grant',
+      $disk_nodes.reduce({}) |$memo, $node| {
+         $temp=merge($memo,
+           {
+             "${db_user}@$node/cns_db.*" => {
+               user => "${db_user}@$node",
+               require => [ Mysql_database['cns_db'], Mysql_user["${db_user}@$node"] ]
+             }            
+           }
+         )
+         $temp
+      },
+    
+      {
+        ensure     => 'present',
+        options    => ['GRANT'],
+        privileges => ['ALL'],
+        table      => 'cns_db.*',
+        provider   => 'mysql',
+   })
+    
     class{"lcgdm::base":
-            uid     => $dpmmgr_uid,
-          }
+      uid     => $dpmmgr_uid,
+    }
 
 
     #
@@ -139,15 +178,16 @@ class dpm::headnode (
     lcgdm::shift::trust_value{
       "DPM TRUST":
         component => "DPM",
-        host      => "${disk_nodes}";
+        host      => $disk_nodes_str;
       "DPNS TRUST":
         component => "DPNS",
-        host      => "${disk_nodes}";
+        host      => $disk_nodes_str;
       "RFIO TRUST":
         component => "RFIOD",
-        host      => "${disk_nodes}",
+        host      => $disk_nodes_str,
         all       => true
     }
+
     lcgdm::shift::protocol{"PROTOCOLS":
       component => "DPM",
       proto     => "rfio gsiftp http https xroot"
@@ -183,6 +223,7 @@ class dpm::headnode (
       token_password => "${token_password}",
       mysql_username => "${db_user}",
       mysql_password => "${db_pass}",
+      enable_space_reporting => $enable_space_reporting,
     }
 
     #
@@ -195,12 +236,12 @@ class dpm::headnode (
     class{"dmlite::gridftp":
       dpmhost => "${::fqdn}",
       remote_nodes => $gridftp_redirect ? {
-        1 => regsubst(regsubst("${disk_nodes} ","(\S)\s","\1:2811 ",'G'),"(\S)\s+(\S)","\1,\2",'G'),
+        1 => regsubst(regsubst("${disk_nodes_str} ","(\S)\s","\1:2811 ",'G'),"(\S)\s+(\S)","\1,\2",'G'),
         0 => undef,
       },                   
     }
 
-    if($gridftp_redirect==1){
+    if($gridftp_redirect == 1){
       lcgdm::shift::protocol_head{"GRIDFTP":
              component => "DPM",
              protohead => "FTPHEAD",

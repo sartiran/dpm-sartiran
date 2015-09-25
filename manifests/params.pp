@@ -16,6 +16,7 @@ class dpm::params {
   #DB/Auth options
   $db_user =  hiera("dpm::params::db_user","dpmmgr")
   $db_pass =  hiera("dpm::params::db_pass","")
+  $db_hash =  hiera("dpm::params::db_hash","")
   $mysql_root_pass =  hiera("dpm::params::mysql_root_pass","")
   $token_password =  hiera("dpm::params::token_password","")
   $xrootd_sharedkey =  hiera("dpm::params::xrootd_sharedkey","")
@@ -39,4 +40,8 @@ class dpm::params {
 
   #Gridftp redirection
   $gridftp_redirect =  hiera("dpm::params::gridftp_redirect",0)
+
+  #Gridftp redirection
+  $enable_space_reporting =  hiera("dpm::params::enable_space_reporting",false)
+ 
 }

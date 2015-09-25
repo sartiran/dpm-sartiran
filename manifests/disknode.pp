@@ -31,7 +31,10 @@ class dpm::disknode (
   $debug = $dpm::params::debug,
 
   #GridFTP redirection
-  $gridftp_redir = $dpm::params::gridftp_redir,
+  $gridftp_redirect = $dpm::params::gridftp_redirect,
+
+  #Enable Space reporting
+  $enable_space_reporting =  $dpm::params::enable_space_reporting,
   
   )inherits dpm::params {
 
@@ -53,7 +56,9 @@ class dpm::disknode (
       }else{
         $site_name = undef
       }
-                
+
+    $disk_nodes_str=join($disk_nodes,' ');
+      
     
     #some packages that should be present if we want things to run
 
@@ -92,13 +97,13 @@ class dpm::disknode (
     lcgdm::shift::trust_value{
       "DPM TRUST":
         component => "DPM",
-        host      => "${headnode_fqdn} ${disk_nodes}";
+        host      => "${headnode_fqdn} ${disk_nodes_str}";
       "DPNS TRUST":
         component => "DPNS",
-        host      => "${headnode_fqdn} ${disk_nodes}";
+        host      => "${headnode_fqdn} ${disk_nodes_str}";
       "RFIO TRUST":
         component => "RFIOD",
-        host      => "${headnode_fqdn} ${disk_nodes}",
+        host      => "${headnode_fqdn} ${disk_nodes_str}",
         all       => true
     }
     lcgdm::shift::protocol{"PROTOCOLS":
@@ -131,6 +136,10 @@ class dpm::disknode (
       token_password => "${token_password}",
       dpmhost        => "${headnode_fqdn}",
       nshost         => "${headnode_fqdn}",
+      mysql_username => "${db_user}",
+      mysql_password => "${db_pass}",
+      mysql_host     => "${headnode_fqdn}",
+      enable_space_reporting => $enable_space_reporting,
     }
     
     #
@@ -143,7 +152,7 @@ class dpm::disknode (
 
     class{"dmlite::gridftp":
       dpmhost => "${headnode_fqdn}",
-      data_note => $gridftp_redirect,
+      data_node => $gridftp_redirect,
     }
 
     
