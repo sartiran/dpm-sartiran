@@ -1,0 +1,62 @@
+{
+  "source": "UNKNOWN",
+  "project_page": "https://github.com/sartiran/puppet",
+  "license": "Apache License, Version 2.0",
+  "checksums": {
+    "manifests/headnode.pp": "896911961813d939c606e0217040ad27",
+    "manifests/params.pp": "8afe9d3963926041105bd8c1167e7bc9",
+    "spec/spec_helper.rb": "a55d1e6483344f8ec6963fcb2c220372",
+    "README": "8043d592d5f8550548974dcfa16e5b3c",
+    "Modulefile": "d0ddcbb5d24cecb7a84544a457c86f5f",
+    "manifests/init.pp": "ef65978aa1d3b51756dd704fb9824ef4",
+    "manifests/disknode.pp": "200c9b650d4810493e4fd8b54670d89e",
+    "README.md": "906d036cf5af74099e01e974e6f51e73",
+    "tests/init.pp": "d5b541f111ec1c20e913e9711d020200"
+  },
+  "description": "Just a wrapper for the DPM modules of the lcgdm team",
+  "dependencies": [
+    {
+      "version_requirement": "0.1.2",
+      "name": "lcgdm/gridftp"
+    },
+    {
+      "version_requirement": "0.3.9",
+      "name": "lcgdm/dmlite"
+    },
+    {
+      "version_requirement": "0.2.9",
+      "name": "lcgdm/lcgdm"
+    },
+    {
+      "version_requirement": "0.1.3",
+      "name": "lcgdm/xrootd"
+    },
+    {
+      "version_requirement": ">= 4.5.1",
+      "name": "puppetlabs/stdlib"
+    },
+    {
+      "version_requirement": "0.1.0",
+      "name": "rocha/voms"
+    },
+    {
+      "version_requirement": ">= 3.1.0",
+      "name": "puppetlabs/mysql"
+    },
+    {
+      "version_requirement": ">= 1.4.0",
+      "name": "puppetlabs/firewall"
+    },
+    {
+      "version_requirement": "2.6.0",
+      "name": "saz/memcached"
+    }
+  ],
+  "summary": "Just a wrapper for the DPM modules of the lcgdm team",
+  "name": "sartiran-dpm",
+  "version": "1.8.10-2",
+  "author": "sartiran",
+  "types": [
+
+  ]
+}

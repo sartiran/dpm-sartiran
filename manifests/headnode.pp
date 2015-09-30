@@ -1,4 +1,4 @@
-#
+
 #class based on the dpm wiki example
 #
 class dpm::headnode (
@@ -19,8 +19,6 @@ class dpm::headnode (
     #DB/Auth options
     $db_user =  $dpm::params::db_user,
     $db_pass =  $dpm::params::db_pass,
-    #$db_hash =  "*3573F3D4D433A1EAB3058322CA680B0FE2F3E9D8",
-    $db_hash =  $dpm::params::db_hash,
     $mysql_root_pass =  $dpm::params::mysql_root_pass,
     $token_password =  $dpm::params::token_password,
     $xrootd_sharedkey =  $dpm::params::xrootd_sharedkey,
@@ -114,39 +112,6 @@ class dpm::headnode (
     }
 
 
-    #configure grants
-    ensure_resource('mysql_user', $disk_nodes.map |$node| {"${db_user}@$node"},{
-      ensure        => present,
-      password_hash => $db_hash,
-      provider      => 'mysql',
-      tag => 'nodeuser',
-    })
-
-
-    
-  
-    create_resources(
-      'mysql_grant',
-      $disk_nodes.reduce({}) |$memo, $node| {
-         $temp=merge($memo,
-           {
-             "${db_user}@$node/cns_db.*" => {
-               user => "${db_user}@$node",
-               require => [ Mysql_database['cns_db'], Mysql_user["${db_user}@$node"] ]
-             }            
-           }
-         )
-         $temp
-      },
-    
-      {
-        ensure     => 'present',
-        options    => ['GRANT'],
-        privileges => ['ALL'],
-        table      => 'cns_db.*',
-        provider   => 'mysql',
-   })
-    
     class{"lcgdm::base":
       uid     => $dpmmgr_uid,
     }

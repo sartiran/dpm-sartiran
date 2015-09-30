@@ -16,7 +16,6 @@ class dpm::params {
   #DB/Auth options
   $db_user =  hiera("dpm::params::db_user","dpmmgr")
   $db_pass =  hiera("dpm::params::db_pass","")
-  $db_hash =  hiera("dpm::params::db_hash","")
   $mysql_root_pass =  hiera("dpm::params::mysql_root_pass","")
   $token_password =  hiera("dpm::params::token_password","")
   $xrootd_sharedkey =  hiera("dpm::params::xrootd_sharedkey","")
