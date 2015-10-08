@@ -32,7 +32,7 @@
       "name": "lcgdm/xrootd"
     },
     {
-      "version_requirement": ">= 4.5.1",
+      "version_requirement": ">= 4.9.0",
       "name": "puppetlabs/stdlib"
     },
     {
@@ -40,21 +40,21 @@
       "name": "rocha/voms"
     },
     {
-      "version_requirement": ">= 3.1.0",
+      "version_requirement": ">= 3.6.1",
       "name": "puppetlabs/mysql"
     },
     {
-      "version_requirement": ">= 1.4.0",
+      "version_requirement": ">= 1.7.1",
       "name": "puppetlabs/firewall"
     },
     {
-      "version_requirement": "2.6.0",
+      "version_requirement": "2.8.1",
       "name": "saz/memcached"
     }
   ],
   "summary": "Just a wrapper for the DPM modules of the lcgdm team",
   "name": "sartiran-dpm",
-  "version": "1.8.10-2",
+  "version": "1.8.10-3",
   "author": "sartiran",
   "types": [
 
