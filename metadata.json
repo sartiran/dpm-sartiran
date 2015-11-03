@@ -20,11 +20,11 @@
       "name": "lcgdm/gridftp"
     },
     {
-      "version_requirement": "0.3.9",
+      "version_requirement": "0.3.10",
       "name": "lcgdm/dmlite"
     },
     {
-      "version_requirement": "0.2.9",
+      "version_requirement": "0.2.10",
       "name": "lcgdm/lcgdm"
     },
     {
