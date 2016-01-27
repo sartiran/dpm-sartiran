@@ -20,7 +20,7 @@
       "name": "lcgdm/gridftp"
     },
     {
-      "version_requirement": "0.3.10",
+      "version_requirement": "0.3.11",
       "name": "lcgdm/dmlite"
     },
     {
@@ -28,7 +28,7 @@
       "name": "lcgdm/lcgdm"
     },
     {
-      "version_requirement": "0.1.3",
+      "version_requirement": "0.1.4",
       "name": "lcgdm/xrootd"
     },
     {
@@ -54,7 +54,7 @@
   ],
   "summary": "Just a wrapper for the DPM modules of the lcgdm team",
   "name": "sartiran-dpm",
-  "version": "1.8.10-3",
+  "version": "1.8.10-4",
   "author": "sartiran",
   "types": [
 
