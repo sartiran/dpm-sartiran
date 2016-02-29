@@ -16,19 +16,19 @@
   "description": "Just a wrapper for the DPM modules of the lcgdm team",
   "dependencies": [
     {
-      "version_requirement": "0.1.2",
+      "version_requirement": "0.2.0",
       "name": "lcgdm/gridftp"
     },
     {
-      "version_requirement": "0.3.11",
+      "version_requirement": "0.4.0",
       "name": "lcgdm/dmlite"
     },
     {
-      "version_requirement": "0.2.10",
+      "version_requirement": "0.3.0",
       "name": "lcgdm/lcgdm"
     },
     {
-      "version_requirement": "0.1.4",
+      "version_requirement": "0.2.0",
       "name": "lcgdm/xrootd"
     },
     {
@@ -54,7 +54,7 @@
   ],
   "summary": "Just a wrapper for the DPM modules of the lcgdm team",
   "name": "sartiran-dpm",
-  "version": "1.8.10-4",
+  "version": "1.8.10-5",
   "author": "sartiran",
   "types": [
 
